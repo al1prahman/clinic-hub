@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const medicalRecordController = require('../controllers/medicalRecord.controller');
 
-// TODO: Import controllers
-// const { } = require('../controllers/medicalRecord.controller');
+// POST /api/medical-records
+router.post('/', medicalRecordController.create);
 
-// TODO: Define routes
-// router.get('/', controller.getAll);
+// GET /api/medical-records/patient/:id
+router.get('/patient/:id', medicalRecordController.getByPatient);
 
 module.exports = router;

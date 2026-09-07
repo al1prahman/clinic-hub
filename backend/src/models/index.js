@@ -1,65 +1,75 @@
-const { sequelize } = require('./config/database');
+const { sequelize } = require('../config/database');
 
-// Models
-const User = require('./models/user');
-const Patient = require('./models/patient');
-const Polyclinic = require('./models/polyclinic');
-const Doctor = require('./models/doctor');
-const Registration = require('./models/registration');
-const Queue = require('./models/queue');
-const MedicalRecord = require('./models/medicalRecord');
-const Prescription = require('./models/prescription');
+// Import models
+const User = require('./user');
+const Patient = require('./patient');
+const Polyclinic = require('./polyclinic');
+const Doctor = require('./doctor');
+const Registration = require('./registration');
+const Queue = require('./queue');
+const MedicalRecord = require('./medicalRecord');
+const Prescription = require('./prescription');
+const MedicalProcedure = require('./medicalProcedure');
 
-// Define associations
-// User -> Doctor (1:1)
-Doctor.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+// ========================================
+// Associations
+// ========================================
+
+// User <-> Doctor (1:1)
 User.hasOne(Doctor, { foreignKey: 'userId', as: 'doctor' });
+Doctor.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 // Polyclinic -> Doctor (1:M)
-Doctor.belongsTo(Polyclinic, { foreignKey: 'polyclinicId', as: 'polyclinic' });
 Polyclinic.hasMany(Doctor, { foreignKey: 'polyclinicId', as: 'doctors' });
-
-// User -> Registration (Doctor)
-Registration.belongsTo(Doctor, { foreignKey: 'doctorId', as: 'doctor' });
-Doctor.hasMany(Registration, { foreignKey: 'doctorId', as: 'registrations' });
+Doctor.belongsTo(Polyclinic, { foreignKey: 'polyclinicId', as: 'polyclinic' });
 
 // Patient -> Registration (1:M)
-Registration.belongsTo(Patient, { foreignKey: 'patientId', as: 'patient' });
 Patient.hasMany(Registration, { foreignKey: 'patientId', as: 'registrations' });
+Registration.belongsTo(Patient, { foreignKey: 'patientId', as: 'patient' });
 
-// Polyclinic -> Registration
-Registration.belongsTo(Polyclinic, { foreignKey: 'polyclinicId', as: 'polyclinic' });
+// Doctor -> Registration (1:M)
+Doctor.hasMany(Registration, { foreignKey: 'doctorId', as: 'registrations' });
+Registration.belongsTo(Doctor, { foreignKey: 'doctorId', as: 'doctor' });
+
+// Polyclinic -> Registration (1:M)
 Polyclinic.hasMany(Registration, { foreignKey: 'polyclinicId', as: 'registrations' });
+Registration.belongsTo(Polyclinic, { foreignKey: 'polyclinicId', as: 'polyclinic' });
 
-// Registration -> Queue (1:1)
-Queue.belongsTo(Registration, { foreignKey: 'registrationId', as: 'registration' });
+// Registration <-> Queue (1:1)
 Registration.hasOne(Queue, { foreignKey: 'registrationId', as: 'queue' });
+Queue.belongsTo(Registration, { foreignKey: 'registrationId', as: 'registration' });
 
 // Patient -> Queue (1:M)
-Queue.belongsTo(Patient, { foreignKey: 'patientId', as: 'patient' });
 Patient.hasMany(Queue, { foreignKey: 'patientId', as: 'queues' });
+Queue.belongsTo(Patient, { foreignKey: 'patientId', as: 'patient' });
 
 // Doctor -> Queue (1:M)
-Queue.belongsTo(Doctor, { foreignKey: 'doctorId', as: 'doctor' });
 Doctor.hasMany(Queue, { foreignKey: 'doctorId', as: 'queues' });
+Queue.belongsTo(Doctor, { foreignKey: 'doctorId', as: 'doctor' });
 
-// Registration -> MedicalRecord (1:1)
-MedicalRecord.belongsTo(Registration, { foreignKey: 'registrationId', as: 'registration' });
+// Registration <-> MedicalRecord (1:1)
 Registration.hasOne(MedicalRecord, { foreignKey: 'registrationId', as: 'medicalRecord' });
+MedicalRecord.belongsTo(Registration, { foreignKey: 'registrationId', as: 'registration' });
 
 // Patient -> MedicalRecord (1:M)
-MedicalRecord.belongsTo(Patient, { foreignKey: 'patientId', as: 'patient' });
 Patient.hasMany(MedicalRecord, { foreignKey: 'patientId', as: 'medicalRecords' });
+MedicalRecord.belongsTo(Patient, { foreignKey: 'patientId', as: 'patient' });
 
 // Doctor -> MedicalRecord (1:M)
-MedicalRecord.belongsTo(Doctor, { foreignKey: 'doctorId', as: 'doctor' });
 Doctor.hasMany(MedicalRecord, { foreignKey: 'doctorId', as: 'medicalRecords' });
+MedicalRecord.belongsTo(Doctor, { foreignKey: 'doctorId', as: 'doctor' });
 
 // MedicalRecord -> Prescription (1:M)
-Prescription.belongsTo(MedicalRecord, { foreignKey: 'medicalRecordId', as: 'medicalRecord' });
 MedicalRecord.hasMany(Prescription, { foreignKey: 'medicalRecordId', as: 'prescriptions' });
+Prescription.belongsTo(MedicalRecord, { foreignKey: 'medicalRecordId', as: 'medicalRecord' });
 
+// MedicalRecord -> MedicalProcedure (1:M)
+MedicalRecord.hasMany(MedicalProcedure, { foreignKey: 'medicalRecordId', as: 'medicalProcedures' });
+MedicalProcedure.belongsTo(MedicalRecord, { foreignKey: 'medicalRecordId', as: 'medicalRecord' });
+
+// ========================================
 // Export
+// ========================================
 module.exports = {
   sequelize,
   User,
@@ -70,4 +80,5 @@ module.exports = {
   Queue,
   MedicalRecord,
   Prescription,
+  MedicalProcedure,
 };

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const patientController = require('../controllers/patient.controller');
 const { authenticate } = require('../middleware/auth');
-const { validate } = require('../middleware/validate');
+const validate = require('../middleware/validate');
 const { body } = require('express-validator');
 
 // All patient routes require authentication

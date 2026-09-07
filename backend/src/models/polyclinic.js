@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
 const Polyclinic = sequelize.define('Polyclinic', {
@@ -6,17 +6,21 @@ const Polyclinic = sequelize.define('Polyclinic', {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
+    field: 'id',
   },
   name: {
     type: DataTypes.STRING(100),
     allowNull: false,
+    field: 'name',
   },
   description: {
     type: DataTypes.TEXT,
+    field: 'description',
   },
-  isActive: {
+  is_active: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
+    field: 'is_active',
   },
 }, {
   tableName: 'polyclinics',

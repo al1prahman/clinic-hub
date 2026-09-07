@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
-const Prescription = sequelize.define('Prescription', {
+const MedicalProcedure = sequelize.define('MedicalProcedure', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -17,26 +17,21 @@ const Prescription = sequelize.define('Prescription', {
     },
     onDelete: 'CASCADE',
   },
-  medicationName: {
+  procedureName: {
     type: DataTypes.STRING(200),
     allowNull: false,
-    field: 'medication_name',
+    field: 'procedure_name',
   },
-  dosage: {
-    type: DataTypes.STRING(100),
-  },
-  frequency: {
-    type: DataTypes.STRING(100),
-  },
-  duration: {
-    type: DataTypes.STRING(100),
-  },
-  instructions: {
+  procedureNotes: {
     type: DataTypes.TEXT,
+    field: 'procedure_notes',
+  },
+  cost: {
+    type: DataTypes.DECIMAL(12, 2),
   },
 }, {
-  tableName: 'prescriptions',
+  tableName: 'medical_procedures',
   timestamps: true,
 });
 
-module.exports = Prescription;
+module.exports = MedicalProcedure;

@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const dashboardController = require('../controllers/dashboard.controller');
 
-// TODO: Import controllers
-// const { } = require('../controllers/dashboard.controller');
-
-// TODO: Define routes
-// router.get('/', controller.getAll);
+// GET /api/dashboard/stats
+router.get('/stats', dashboardController.getStats);
 
 module.exports = router;
