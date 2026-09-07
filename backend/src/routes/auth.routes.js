@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const authController = require('../controllers/auth.controller');
+const { authenticate } = require('../middleware/auth');
 
-// TODO: Import controllers
-// const { } = require('../controllers/auth.controller');
+// Public routes
+router.post('/login', authController.login);
 
-// TODO: Define routes
-// router.get('/', controller.getAll);
+// Protected routes
+router.post('/logout', authenticate, authController.logout);
 
 module.exports = router;
